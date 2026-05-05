@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The 6 Testing Gates Behind a Confident ERP Go-Live | Carlos Gabriel</title>
+  <meta name="description" content="A business stakeholder's guide to the six ERP testing phases — what gets tested at each stage, who owns the decisions, and the red flags that quietly derail go-lives. Applicable to SAP, Oracle, Microsoft Dynamics &amp; more." />
+  <meta name="author" content="Carlos Gabriel" />
+  <link rel="canonical" href="https://carloscgabriel.github.io/ERP_testing/" />
+
+  <!-- Open Graph / LinkedIn / Facebook -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Carlos Gabriel" />
+  <meta property="og:url" content="https://carloscgabriel.github.io/ERP_testing/" />
+  <meta property="og:title" content="The 6 Testing Gates Behind a Confident ERP Go-Live" />
+  <meta property="og:description" content="A business stakeholder's guide to the six ERP testing phases — what gets tested, who owns each decision, and the red flags that quietly derail go-lives." />
+  <meta property="og:image" content="https://carloscgabriel.github.io/ERP_testing/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The 6 Testing Gates Behind a Confident ERP Go-Live — by Carlos Gabriel" />
+  <meta property="article:author" content="https://www.linkedin.com/in/carlosgabriel/" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The 6 Testing Gates Behind a Confident ERP Go-Live" />
+  <meta name="twitter:description" content="A business stakeholder's guide to the six ERP testing phases — and the red flags that quietly derail go-lives." />
+  <meta name="twitter:image" content="https://carloscgabriel.github.io/ERP_testing/og-image.png" />
+  <style>
+    :root {
+      --primary: #0057B8;
+      --primary-dark: #003A7A;
+      --accent: #F0AB00;
+      --bg: #F4F6FA;
+      --card-bg: #FFFFFF;
+      --text-primary: #1D2D3E;
+      --text-secondary: #556B7D;
+      --border: #D3DCE6;
+      --shadow: 0 4px 24px rgba(0,60,160,0.09);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+    /* HEADER */
+    header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); padding: 36px 48px 32px; position: relative; overflow: hidden; }
+    header::after { content: ''; position: absolute; bottom: -40px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .header-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+    header h1 { font-size: 32px; font-weight: 700; color: #fff; line-height: 1.2; max-width: 680px; }
+    header p  { margin-top: 12px; font-size: 15px; color: rgba(255,255,255,0.75); max-width: 640px; line-height: 1.6; }
+    .header-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .header-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 6px 16px; font-size: 12px; color: rgba(255,255,255,0.9); }
+    .header-byline { margin-top: 18px; font-size: 13px; color: rgba(255,255,255,0.78); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .header-byline strong { color: #fff; font-weight: 600; }
+    .header-byline a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(240,171,0,0.5); padding-bottom: 1px; transition: border-color 0.2s ease; }
+    .header-byline a:hover { border-bottom-color: var(--accent); }
+    .header-byline .sep { opacity: 0.4; }
+
+    /* STEPPER */
+    .stepper-wrap { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 0 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .stepper { display: flex; align-items: stretch; max-width: 1200px; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
+    .stepper::-webkit-scrollbar { display: none; }
+    .step { flex: 1; min-width: 100px; display: flex; flex-direction: column; align-items: center; padding: 14px 8px 11px; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.22s ease; position: relative; user-select: none; }
+    .step:hover { background: rgba(0,87,184,0.04); }
+    .step.active { border-bottom-color: var(--phase-color, var(--primary)); }
+    .step-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 6px; border: 2px solid var(--border); background: #fff; transition: all 0.22s ease; }
+    .step.active .step-icon { border-color: var(--phase-color, var(--primary)); background: var(--phase-color, var(--primary)); }
+    .step-label { font-size: 9.5px; font-weight: 600; text-align: center; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px; line-height: 1.3; }
+    .step.active .step-label { color: var(--phase-color, var(--primary)); }
+    .step-num { position: absolute; top: 8px; left: 7px; font-size: 9px; font-weight: 700; color: var(--border); }
+    .step.active .step-num { color: var(--phase-color, var(--primary)); }
+    .step:not(:last-child)::after { content: ''; position: absolute; top: 25px; right: -1px; width: 1px; height: 20px; background: var(--border); }
+    /* Parallel indicator on stepper */
+    .step-parallel { font-size: 8px; color: #B87800; font-weight: 700; letter-spacing: 0; margin-top: 2px; }
+
+    /* MAIN */
+    .main { max-width: 1200px; margin: 0 auto; padding: 32px 32px 64px; }
+
+    /* PANELS */
+    .phase-panel { display: none; animation: fadeSlide 0.3s ease; }
+    .phase-panel.visible { display: block; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* HERO */
+    .phase-hero { border-radius: 16px; padding: 32px 36px; margin-bottom: 28px; position: relative; overflow: hidden; color: #fff; }
+    .phase-hero::before { content: attr(data-emoji); position: absolute; right: 32px; top: 50%; transform: translateY(-50%); font-size: 88px; opacity: 0.12; line-height: 1; }
+    .phase-hero-tag { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; margin-bottom: 8px; }
+    .phase-hero h2  { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .phase-hero p   { font-size: 15px; line-height: 1.7; max-width: 680px; opacity: 0.92; }
+    .phase-hero .meta { margin-top: 18px; display: flex; gap: 24px; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .meta-item label { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+    .meta-item span  { font-size: 14px; font-weight: 600; }
+
+    /* CARDS */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); gap: 20px; margin-bottom: 24px; }
+    .card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow); }
+    .card-title { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card-title .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .card ul li { font-size: 13.5px; line-height: 1.55; display: flex; gap: 9px; align-items: flex-start; }
+    .card ul li::before { content: '›'; font-size: 18px; font-weight: 700; flex-shrink: 0; margin-top: -2px; }
+
+    /* TL;DR */
+    .tldr { background: linear-gradient(135deg, #FFF8E8 0%, #FFFAEF 100%); border: 1px solid #E8C87A; border-left: 4px solid var(--accent); border-radius: 12px; padding: 22px 26px; margin-bottom: 26px; box-shadow: var(--shadow); }
+    .tldr-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #8B5C00; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .tldr-label::before { content: '⚡'; font-size: 14px; }
+    .tldr ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .tldr ul li { font-size: 14.5px; line-height: 1.6; color: var(--text-primary); display: flex; gap: 10px; align-items: flex-start; }
+    .tldr ul li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .tldr ul li strong { color: var(--primary-dark); }
+
+    /* BANNERS */
+    .gate-banner { border-radius: 12px; padding: 18px 22px; display: flex; gap: 15px; align-items: flex-start; margin-bottom: 22px; }
+    .gate-banner.info     { background: #EAF3FF; border: 1px solid #B0CFEF; }
+    .gate-banner.go       { background: #EAF5EE; border: 1px solid #A3D6B4; }
+    .gate-banner.warn     { background: #FFF4E5; border: 1px solid #F0C87A; }
+    .gate-banner.critical { background: #FFF0F0; border: 1px solid #F5B0B0; }
+    .gate-banner.dark     { background: #1D2D3E; border: 1px solid #0D1A26; }
+    .gate-banner.dark .gate-body h3 { color: #fff; }
+    .gate-banner.dark .gate-body p  { color: rgba(255,255,255,0.72); }
+    .gate-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+    .gate-body h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 5px; }
+    .gate-body p  { font-size: 13.5px; line-height: 1.65; color: var(--text-secondary); }
+    .gate-body p + p { margin-top: 8px; }
+
+    /* ROLES */
+    .roles-strip { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 18px 22px; margin-bottom: 22px; }
+    .roles-strip h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 12px; }
+    .roles-list { display: flex; flex-wrap: wrap; gap: 9px; }
+    .role-chip { display: flex; align-items: center; gap: 7px; border-radius: 20px; padding: 5px 13px; font-size: 13px; font-weight: 500; border: 1px solid transparent; }
+    .role-chip .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* KPIs */
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 26px; }
+    .kpi-card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 16px 18px; box-shadow: var(--shadow); }
+    .kpi-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 7px; }
+    .kpi-value { font-size: 25px; font-weight: 700; }
+    .kpi-sub   { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+
+    /* SECTION DIVIDER */
+    .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 14px; margin-top: 4px; }
+
+    /* PILLARS (business simulation) */
+    .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .pillar { border-radius: 12px; padding: 20px; border: 1px solid var(--border); background: #fff; box-shadow: var(--shadow); }
+    .pillar-icon { font-size: 26px; margin-bottom: 10px; }
+    .pillar-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 4px; }
+    .pillar h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .pillar p  { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+
+    /* NAV */
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,87,184,0.04); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    /* DOTS */
+    .phase-dots { display: flex; justify-content: center; gap: 7px; margin-top: 10px; }
+    .phase-dot  { width: 8px; height: 8px; border-radius: 50%; cursor: pointer; transition: all 0.2s; opacity: 0.4; }
+    .phase-dot.active { width: 22px; border-radius: 4px; opacity: 1; }
+
+    /* WELCOME */
+    .welcome { text-align: center; padding: 52px 28px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .welcome .big-icon { font-size: 60px; margin-bottom: 18px; }
+    .welcome h2 { font-size: 23px; font-weight: 700; margin-bottom: 11px; }
+    .welcome p  { font-size: 14.5px; color: var(--text-secondary); max-width: 520px; margin: 0 auto 26px; line-height: 1.7; }
+    .welcome-phases { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; max-width: 680px; margin: 0 auto 28px; }
+    .welcome-phase-chip { display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: #fff; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+    .welcome-phase-chip:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.16); }
+
+    /* PARALLEL BADGE */
+    .parallel-badge { display: inline-flex; align-items: center; gap: 5px; background: #FFF8E8; border: 1px solid #E8C87A; border-radius: 20px; padding: 4px 12px; font-size: 11.5px; font-weight: 600; color: #8B5C00; margin-bottom: 22px; }
+
+    /* COLOUR PALETTE */
+    .col1{color:#0057B8;} .bg1{background:#0057B8;} .hero1{background:linear-gradient(135deg,#003A7A,#0057B8);} .chip1{background:#E8F1FF;border-color:#B0CFEF;}
+    .col2{color:#5B38B5;} .bg2{background:#5B38B5;} .hero2{background:linear-gradient(135deg,#3A1E80,#5B38B5);} .chip2{background:#F3F0FF;border-color:#C9BBEE;}
+    .col3{color:#0E6868;} .bg3{background:#0E6868;} .hero3{background:linear-gradient(135deg,#074848,#0E6868);} .chip3{background:#E5F3F3;border-color:#9ECFCF;}
+    .col4{color:#8B5C00;} .bg4{background:#B87800;} .hero4{background:linear-gradient(135deg,#5C3D00,#B87800);} .chip4{background:#FFF8E8;border-color:#E8C87A;}
+    .col5{color:#107E3E;} .bg5{background:#107E3E;} .hero5{background:linear-gradient(135deg,#095C2C,#107E3E);} .chip5{background:#EAF5EE;border-color:#A3D6B4;}
+    .col6{color:#8B0000;} .bg6{background:#9B1010;} .hero6{background:linear-gradient(135deg,#5A0000,#9B1010);} .chip6{background:#FFF0F0;border-color:#F5B0B0;}
+    .chipN{background:#F4F6FA;border-color:var(--border);}
+
+    footer { padding:0; font-size:12px; color:var(--text-secondary); border-top:1px solid var(--border); background:#fff; }
+    .footer-cta { max-width: 880px; margin: 0 auto; padding: 48px 32px 32px; text-align: center; }
+    .footer-cta h3 { font-size: 22px; font-weight: 700; color: var(--primary-dark); margin-bottom: 14px; line-height: 1.3; }
+    .footer-cta p { font-size: 15px; line-height: 1.7; color: var(--text-primary); margin-bottom: 16px; max-width: 680px; margin-left: auto; margin-right: auto; }
+    .footer-cta .question { font-size: 16px; font-weight: 600; color: var(--primary-dark); margin-top: 24px; padding: 18px 24px; background: #EAF3FF; border-left: 4px solid var(--primary); border-radius: 8px; text-align: left; max-width: 680px; margin-left: auto; margin-right: auto; }
+    .author-card { max-width: 880px; margin: 0 auto; padding: 24px 32px 32px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; justify-content: center; border-top: 1px dashed var(--border); }
+    .author-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; flex-shrink: 0; box-shadow: var(--shadow); }
+    .author-text { flex: 1; min-width: 240px; max-width: 600px; text-align: left; }
+    .author-text .author-label { font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+    .author-text h4 { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .author-text .author-title { font-size: 12px; font-weight: 600; color: var(--primary); letter-spacing: 0.2px; margin-bottom: 8px; line-height: 1.5; }
+    .author-text p { font-size: 13.5px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 8px; }
+    .author-text a { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 13.5px; border-bottom: 1px solid rgba(0,87,184,0.3); transition: border-color 0.2s ease; }
+    .author-text a:hover { border-bottom-color: var(--primary); }
+    .footer-meta { text-align:center; padding:18px 22px; font-size:11.5px; color:var(--text-secondary); background: var(--bg); }
+    @media (max-width: 600px) {
+      .footer-cta { padding: 36px 18px 24px; }
+      .footer-cta h3 { font-size: 19px; }
+      .author-card { padding: 20px 18px 24px; flex-direction: column; text-align: center; }
+      .author-text { text-align: center; }
+    }
+
+    @media(max-width:700px){
+      header{padding:22px 18px 18px;} header h1{font-size:21px;}
+      .stepper-wrap{padding:0 6px;} .step{min-width:78px;padding:10px 4px 8px;} .step-label{font-size:8.5px;}
+      .main{padding:18px 12px 44px;} .phase-hero{padding:20px 16px;} .phase-hero h2{font-size:19px;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">ERP Implementation</div>
+  <h1>The 6 Testing Gates Behind a Confident ERP Go-Live</h1>
+  <p>A business stakeholder's guide to what gets tested at each phase, who owns each decision, and the red flags that quietly derail go-lives — built from years inside global ERP rollouts.</p>
+  <div class="header-badges">
+    <div class="header-badge">📋 Applicable to SAP, Oracle, Microsoft Dynamics &amp; more</div>
+    <div class="header-badge">🏢 Written for Business Stakeholders</div>
+  </div>
+  <div class="header-byline">
+    <span>By <strong>Carlos Gabriel</strong></span>
+    <span class="sep">·</span>
+    <a href="https://www.linkedin.com/in/carlosgabriel/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
+  </div>
+</header>
+
+<div class="stepper-wrap">
+  <div class="stepper" id="stepper">
+    <div class="step active" data-phase="0" onclick="goTo(0)" style="--phase-color:#0057B8">
+      <span class="step-num">—</span><div class="step-icon">🏠</div><div class="step-label">Overview</div>
+    </div>
+    <div class="step" data-phase="1" onclick="goTo(1)" style="--phase-color:#0057B8">
+      <span class="step-num">01</span><div class="step-icon">🔧</div><div class="step-label">Unit Testing</div>
+    </div>
+    <div class="step" data-phase="2" onclick="goTo(2)" style="--phase-color:#5B38B5">
+      <span class="step-num">02</span><div class="step-icon">🔗</div><div class="step-label">Integration Testing</div>
+    </div>
+    <div class="step" data-phase="3" onclick="goTo(3)" style="--phase-color:#0E6868">
+      <span class="step-num">03</span><div class="step-icon">⚡</div><div class="step-label">Performance Testing</div>
+      <div class="step-parallel">⟷ parallel</div>
+    </div>
+    <div class="step" data-phase="4" onclick="goTo(4)" style="--phase-color:#B87800">
+      <span class="step-num">04</span><div class="step-icon">🔐</div><div class="step-label">Profile Testing</div>
+      <div class="step-parallel">⟷ parallel</div>
+    </div>
+    <div class="step" data-phase="5" onclick="goTo(5)" style="--phase-color:#107E3E">
+      <span class="step-num">05</span><div class="step-icon">👥</div><div class="step-label">UAT</div>
+    </div>
+    <div class="step" data-phase="6" onclick="goTo(6)" style="--phase-color:#9B1010">
+      <span class="step-num">06</span><div class="step-icon">🎭</div><div class="step-label">Business Simulation</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ═══ PHASE 0: OVERVIEW ═══ -->
+  <div class="phase-panel visible" id="panel-0">
+    <!-- TL;DR — for the LinkedIn skimmer who lands on mobile -->
+    <div class="tldr">
+      <div class="tldr-label">The short version</div>
+      <ul>
+        <li>ERP testing is a <strong>6-phase journey running 5–8 months</strong>. Each phase ends in a sign-off gate that the business — not IT — should treat as a real decision point.</li>
+        <li>Defects caught after go-live cost <strong>roughly 10× more</strong> to fix than ones caught during testing. The earlier the phase, the cheaper the correction.</li>
+        <li><strong>UAT and Business Simulation (Phases 5 &amp; 6)</strong> are where stakeholders are formally on the hook. Everything before that prepares the ground — and the patterns that derail go-lives are usually visible long before either phase begins.</li>
+      </ul>
+    </div>
+
+    <div class="welcome">
+      <div class="big-icon">🗺️</div>
+      <h2>Your Roadmap to a Confident Go-Live</h2>
+      <p>Every successful ERP implementation follows a structured testing journey. As a business stakeholder, your decisions at each phase gate are what protect your organization from costly disruptions at launch. Click any phase to explore it.</p>
+      <div class="welcome-phases">
+        <div class="welcome-phase-chip bg1" onclick="goTo(1)">🔧 Unit Testing</div>
+        <div class="welcome-phase-chip bg2" onclick="goTo(2)">🔗 Integration Testing</div>
+        <div class="welcome-phase-chip bg3" onclick="goTo(3)">⚡ Performance Testing</div>
+        <div class="welcome-phase-chip bg4" onclick="goTo(4)">🔐 Profile Testing</div>
+        <div class="welcome-phase-chip bg5" onclick="goTo(5)">👥 UAT</div>
+        <div class="welcome-phase-chip bg6" onclick="goTo(6)">🎭 Business Simulation</div>
+      </div>
+      <button class="btn btn-primary" onclick="goTo(1)">Start the Journey →</button>
+    </div>
+
+    <div style="margin-top:30px;">
+      <div class="section-label">Why Testing Discipline Matters</div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Total Testing Span</div><div class="kpi-value col1">5–8</div><div class="kpi-sub">months across all phases for a complex ERP</div></div>
+        <div class="kpi-card"><div class="kpi-label">Cost of Late Defects</div><div class="kpi-value" style="color:#BB0000">10×</div><div class="kpi-sub">more expensive to fix after go-live</div></div>
+        <div class="kpi-card"><div class="kpi-label">Business-Led Phase</div><div class="kpi-value col5">UAT</div><div class="kpi-sub">is where the business formally validates the system</div></div>
+        <div class="kpi-card"><div class="kpi-label">Testing Phases</div><div class="kpi-value col4">6</div><div class="kpi-sub">formal stages, each with a sign-off gate</div></div>
+      </div>
+
+      <!-- Governance warning — new requirements -->
+      <div class="gate-banner dark" style="margin-bottom:22px;">
+        <div class="gate-icon">⚠️</div>
+        <div class="gate-body">
+          <h3>Governance Principle: New Requirements During Testing</h3>
+          <p>Any new requirement that surfaces after testing has started will have a significant impact on quality, timeline, and cost. The later in the testing lifecycle it appears, the greater the impact — because the system has already been built, tested, and in some cases validated on the prior design.</p>
+          <p>Critically, new requirements cannot always be absorbed by simply increasing team size. Due to the interdependencies of ERP processes, a single new requirement can cascade across multiple modules and integrated external systems — creating a complexity problem that more people alone cannot solve. Every new requirement introduced during testing must go through formal change control with a full impact assessment.</p>
+        </div>
+      </div>
+
+      <!-- Phase summary table -->
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:var(--primary)"></div>Phase-at-a-Glance</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border);">
+              <th style="text-align:left;padding:7px 10px;color:var(--text-secondary);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;">#</th>
+              <th style="text-align:left;padding:7px 10px;color:var(--text-secondary);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;">Phase</th>
+              <th style="text-align:left;padding:7px 10px;color:var(--text-secondary);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;">Led By</th>
+              <th style="text-align:left;padding:7px 10px;color:var(--text-secondary);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;">Your Effort</th>
+              <th style="text-align:left;padding:7px 10px;color:var(--text-secondary);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;">Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);cursor:pointer;" onclick="goTo(1)" onmouseover="this.style.background='#EAF3FF'" onmouseout="this.style.background=''">
+              <td style="padding:9px 10px;"><span style="background:#0057B8;color:#fff;border-radius:4px;padding:2px 7px;font-weight:700;font-size:11px;">01</span></td>
+              <td style="padding:9px 10px;font-weight:600;">Unit Testing</td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">Functional Consultants</td>
+              <td style="padding:9px 10px;"><span style="background:#EAF5EE;color:#107E3E;border-radius:4px;padding:2px 8px;font-size:11.5px;">Low</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">4 – 8 weeks</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);cursor:pointer;" onclick="goTo(2)" onmouseover="this.style.background='#F3F0FF'" onmouseout="this.style.background=''">
+              <td style="padding:9px 10px;"><span style="background:#5B38B5;color:#fff;border-radius:4px;padding:2px 7px;font-weight:700;font-size:11px;">02</span></td>
+              <td style="padding:9px 10px;font-weight:600;">Integration Testing</td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">Integration Architects</td>
+              <td style="padding:9px 10px;"><span style="background:#FFF4E5;color:#8B5C00;border-radius:4px;padding:2px 8px;font-size:11.5px;">Medium</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">6 – 10 weeks <span style="display:block;font-size:10.5px;color:#5B38B5;margin-top:2px;">Phase 03 &amp; 04 start mid-phase</span></td>
+            </tr>
+            <!-- Parallel group -->
+            <tr style="border-bottom:1px dashed var(--border);cursor:pointer;" onclick="goTo(3)" onmouseover="this.style.background='#E5F3F3'" onmouseout="this.style.background=''">
+              <td style="padding:9px 10px;"><span style="background:#0E6868;color:#fff;border-radius:4px;padding:2px 7px;font-weight:700;font-size:11px;">03</span></td>
+              <td style="padding:9px 10px;font-weight:600;">Performance Testing <span style="margin-left:6px;background:#FFF8E8;color:#8B5C00;border:1px solid #E8C87A;border-radius:10px;padding:1px 8px;font-size:10.5px;font-weight:700;">⟷ parallel</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">Technical / Infrastructure</td>
+              <td style="padding:9px 10px;"><span style="background:#EAF5EE;color:#107E3E;border-radius:4px;padding:2px 8px;font-size:11.5px;">Low</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);" rowspan="2">2 – 4 weeks</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);cursor:pointer;" onclick="goTo(4)" onmouseover="this.style.background='#FFF8E8'" onmouseout="this.style.background=''">
+              <td style="padding:9px 10px;"><span style="background:#B87800;color:#fff;border-radius:4px;padding:2px 7px;font-weight:700;font-size:11px;">04</span></td>
+              <td style="padding:9px 10px;font-weight:600;">Profile Testing <span style="margin-left:6px;background:#FFF8E8;color:#8B5C00;border:1px solid #E8C87A;border-radius:10px;padding:1px 8px;font-size:10.5px;font-weight:700;">⟷ parallel</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">IT Security + Business Owners</td>
+              <td style="padding:9px 10px;"><span style="background:#FFF4E5;color:#8B5C00;border-radius:4px;padding:2px 8px;font-size:11.5px;">Medium</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);cursor:pointer;" onclick="goTo(5)" onmouseover="this.style.background='#EAF5EE'" onmouseout="this.style.background=''">
+              <td style="padding:9px 10px;"><span style="background:#107E3E;color:#fff;border-radius:4px;padding:2px 7px;font-weight:700;font-size:11px;">05</span></td>
+              <td style="padding:9px 10px;font-weight:600;">User Acceptance Testing (UAT)</td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">Business Process Owners</td>
+              <td style="padding:9px 10px;"><span style="background:#FFF0F0;color:#BB0000;border-radius:4px;padding:2px 8px;font-size:11.5px;">Very High</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">4 – 8 weeks</td>
+            </tr>
+            <tr style="cursor:pointer;" onclick="goTo(6)" onmouseover="this.style.background='#FFF0F0'" onmouseout="this.style.background=''">
+              <td style="padding:9px 10px;"><span style="background:#9B1010;color:#fff;border-radius:4px;padding:2px 7px;font-weight:700;font-size:11px;">06</span></td>
+              <td style="padding:9px 10px;font-weight:600;">Business Simulation</td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">Business + All Teams</td>
+              <td style="padding:9px 10px;"><span style="background:#FFF0F0;color:#BB0000;border-radius:4px;padding:2px 8px;font-size:11.5px;">Very High</span></td>
+              <td style="padding:9px 10px;color:var(--text-secondary);">3 – 5 days</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 1: UNIT TESTING ═══ -->
+  <div class="phase-panel" id="panel-1">
+    <div class="phase-hero hero1" data-emoji="🔧">
+      <div class="phase-hero-tag">Phase 01</div>
+      <h2>Unit Testing</h2>
+      <p>The first formal verification that each individual piece of ERP configuration does exactly what the business requirements specified — tested in isolation, before connecting it to anything else.</p>
+      <div class="meta">
+        <div class="meta-item"><label>Typical Duration</label><span>4 – 8 weeks</span></div>
+        <div class="meta-item"><label>Who Leads</label><span>Functional Consultants</span></div>
+        <div class="meta-item"><label>Stakeholder Effort</label><span>Low · Review &amp; Approve</span></div>
+      </div>
+    </div>
+
+    <div class="gate-banner info">
+      <div class="gate-icon">💡</div>
+      <div class="gate-body">
+        <h3>Business Value at This Phase</h3>
+        <p>Unit Testing is largely a technical exercise led by the implementation team, but it produces the first evidence that business requirements have been correctly translated into system configuration. Problems caught here are by far the cheapest to fix in the entire project — and new requirements introduced at this stage still carry a manageable impact compared to later phases.</p>
+      </div>
+    </div>
+
+    <div class="roles-strip">
+      <h3>Who Is Involved</h3>
+      <div class="roles-list">
+        <div class="role-chip chip1"><div class="dot" style="background:#0057B8"></div>Functional Consultants (lead)</div>
+        <div class="role-chip chip1"><div class="dot" style="background:#0057B8"></div>Configuration / Solution Architects</div>
+        <div class="role-chip chip1"><div class="dot" style="background:#0057B8"></div>Developers (custom extensions)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Business Process Owners (reviewers)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Project Manager (progress monitoring)</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0057B8"></div>What Is Being Tested</div>
+        <ul>
+          <li>Individual transactions and screen flows within each functional module (Finance, Procurement, Sales, HR, etc.)</li>
+          <li>Master data records — customers, vendors, materials, organizational structures</li>
+          <li>Custom code and enhancements for each isolated function</li>
+          <li>Role-based access controls and authorization assignments</li>
+          <li>Output documents: invoices, purchase orders, delivery notes, reports</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0057B8"></div>Key Deliverables for Stakeholders</div>
+        <ul>
+          <li>Unit Test Results Report — pass/fail status per business requirement</li>
+          <li>Defect log with severity classification and resolution timeline</li>
+          <li>Updated configuration documentation reflecting any adjustments made</li>
+          <li>First live look at actual system screens aligned to your business processes</li>
+          <li>Formal sign-off before advancing to Integration Testing</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0057B8"></div>Your Role as a Business Stakeholder</div>
+        <ul>
+          <li>Review summary test results — you don't need to run tests yourself</li>
+          <li>Validate that requirements were correctly understood and built by the implementation team</li>
+          <li>Flag any requirements that may have changed since the design phase</li>
+          <li>Approve the exit criteria before Integration Testing begins</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0057B8"></div>Red Flags to Watch For</div>
+        <ul>
+          <li>High defect counts in critical modules appearing late in the phase</li>
+          <li>Unresolved Critical or High severity defects carried forward to Integration Testing</li>
+          <li>Test coverage below 90% of documented requirements</li>
+          <li>New requirements being informally absorbed without change control — this is where scope creep starts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gate-banner warn">
+      <div class="gate-icon">🚦</div>
+      <div class="gate-body">
+        <h3>Gate 1 — Exit Criteria Before Integration Testing</h3>
+        <p>All Critical and High severity defects resolved. Test coverage ≥ 90% of requirements. Any outstanding defects must have agreed resolution plans with committed dates. Your formal sign-off unlocks the next phase.</p>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-outline" onclick="goTo(0)">← Overview</button>
+      <button class="btn btn-primary" onclick="goTo(2)">Integration Testing →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 2: INTEGRATION TESTING ═══ -->
+  <div class="phase-panel" id="panel-2">
+    <div class="phase-hero hero2" data-emoji="🔗">
+      <div class="phase-hero-tag">Phase 02</div>
+      <h2>Integration Testing</h2>
+      <p>Validates that all ERP modules, interfaces, and connected systems work together seamlessly across end-to-end business processes — not just in isolation.</p>
+      <div class="meta">
+        <div class="meta-item"><label>Typical Duration</label><span>6 – 10 weeks</span></div>
+        <div class="meta-item"><label>Who Leads</label><span>Integration Architects &amp; Consultants</span></div>
+        <div class="meta-item"><label>Stakeholder Effort</label><span>Medium · Process Review</span></div>
+      </div>
+    </div>
+
+    <div class="gate-banner info">
+      <div class="gate-icon">🔍</div>
+      <div class="gate-body">
+        <h3>Business Value at This Phase</h3>
+        <p>Integration Testing is where real business processes come alive for the first time. A complete Procure-to-Pay or Order-to-Cash flow runs across multiple modules simultaneously. This is your first opportunity to see actual business operations in the new system — and the last phase before the system is stress-tested technically.</p>
+      </div>
+    </div>
+
+    <div class="parallel-badge">⟷ Performance Testing (Phase 03) &amp; Profile Testing (Phase 04) begin in parallel during the second half of this phase</div>
+
+    <!-- Retest buffer warning -->
+    <div class="gate-banner critical">
+      <div class="gate-icon">🔁</div>
+      <div class="gate-body">
+        <h3>Plan for Retesting — It Is Not Optional</h3>
+        <p>The testing plan must include explicit time buffers for retesting. When a relevant defect is found mid-scenario, fixing it is only the first step. Once the fix is validated, the <strong>entire test scenario must be re-executed from the beginning</strong> — not from the point where the issue occurred. A fix applied to one part of an integrated process can cause unexpected side effects elsewhere in the chain. Skipping full-scenario retesting to save time is one of the most common causes of integration failures at go-live.</p>
+      </div>
+    </div>
+
+    <!-- New requirements warning -->
+    <div class="gate-banner dark">
+      <div class="gate-icon">⚠️</div>
+      <div class="gate-body">
+        <h3>New Requirements at This Stage: The Impact Grows Significantly</h3>
+        <p>A new requirement introduced during Integration Testing is far more disruptive than one caught during Unit Testing. The system has already been configured, tested in isolation, and now integrated. A change affects not just the component being modified, but potentially every process it connects to — across modules and external systems.</p>
+        <p>Adding more consultants does not solve this. ERP interdependencies mean that understanding the full impact of a change, redesigning, reconfiguring, and retesting the affected chains takes time that cannot be parallelized beyond a point. Every new requirement must go through formal change control with a realistic impact assessment before any work begins.</p>
+      </div>
+    </div>
+
+    <div class="roles-strip">
+      <h3>Who Is Involved</h3>
+      <div class="roles-list">
+        <div class="role-chip chip2"><div class="dot" style="background:#5B38B5"></div>Integration Architects (lead)</div>
+        <div class="role-chip chip2"><div class="dot" style="background:#5B38B5"></div>All Functional Consultants</div>
+        <div class="role-chip chip2"><div class="dot" style="background:#5B38B5"></div>Interface / Middleware Teams</div>
+        <div class="role-chip chip2"><div class="dot" style="background:#5B38B5"></div>Data Migration Team</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Business Process Owners (reviewers)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>IT Security Team</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-label">Test Cycles</div><div class="kpi-value col2">2–3</div><div class="kpi-sub">iterative rounds typical for complex ERP rollouts</div></div>
+      <div class="kpi-card"><div class="kpi-label">Process Coverage</div><div class="kpi-value col2">100%</div><div class="kpi-sub">of in-scope end-to-end business processes</div></div>
+      <div class="kpi-card"><div class="kpi-label">Interfaces Tested</div><div class="kpi-value col2">All</div><div class="kpi-sub">ERP-to-external system data flows validated</div></div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#5B38B5"></div>What Is Being Tested</div>
+        <ul>
+          <li>End-to-end process scenarios: Procure-to-Pay, Order-to-Cash, Record-to-Report, Hire-to-Retire</li>
+          <li>Cross-module data flows — e.g., an approved purchase order triggering a goods receipt and an invoice automatically</li>
+          <li>All external interfaces: warehouse, CRM, legacy systems, EDI, APIs, middleware</li>
+          <li>Data migration accuracy: migrated records behaving correctly in live transactions</li>
+          <li>User portal and self-service applications across devices and browsers</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#5B38B5"></div>Key Deliverables for Stakeholders</div>
+        <ul>
+          <li>End-to-End Test Scenario Results — per business process</li>
+          <li>Interface Test Reports — all connected systems validated</li>
+          <li>Updated Defect Register with cross-module issue tracking</li>
+          <li>Process flow validation sign-off per business area</li>
+          <li>Integration Testing Completion Certificate before the next phase begins</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#5B38B5"></div>Your Role as a Business Stakeholder</div>
+        <ul>
+          <li>Attend demo sessions where the team runs live end-to-end processes in the system</li>
+          <li>Review scenario results for your business area and confirm process logic is correct</li>
+          <li>Validate that interfaces with systems your teams depend on are behaving as expected</li>
+          <li>Begin identifying and protecting calendar time for key users who will participate in UAT</li>
+          <li>Enforce change control discipline: any new requirement must go through a formal assessment before acceptance</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#5B38B5"></div>Red Flags to Watch For</div>
+        <ul>
+          <li>Interface failures with external systems deferred without a clear resolution date</li>
+          <li>Critical process scenarios still failing in the final integration testing cycle</li>
+          <li>The team skipping full-scenario retesting after a fix to save time — this accumulates hidden risk</li>
+          <li>New requirements being accepted informally without impact assessment or change control</li>
+          <li>Data migration errors causing transaction failures — a signal of underlying data quality problems</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gate-banner warn">
+      <div class="gate-icon">🚦</div>
+      <div class="gate-body">
+        <h3>Gate 2 — Exit Criteria Before UAT</h3>
+        <p>All critical process scenarios must pass — including any re-executed scenarios following defect fixes. No open Critical defects; High defects must have resolution plans with committed dates. All interfaces must be demonstrably stable. Note: Performance Testing and Profile Testing, which launched in parallel during the second half of this phase, must also have closed their respective gates before UAT can begin. Business Process Owners must sign off that the system is functionally ready before proceeding.</p>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-outline" onclick="goTo(1)">← Unit Testing</button>
+      <button class="btn btn-primary" onclick="goTo(3)">Performance Testing →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 3: PERFORMANCE TESTING ═══ -->
+  <div class="phase-panel" id="panel-3">
+    <div class="phase-hero hero3" data-emoji="⚡">
+      <div class="phase-hero-tag">Phase 03</div>
+      <h2>Performance Testing</h2>
+      <p>Validates that the ERP system handles your real production volumes, peak transaction loads, and concurrent users without slowing down, becoming unstable, or failing under pressure — before business users ever get near it.</p>
+      <div class="meta">
+        <div class="meta-item"><label>Typical Duration</label><span>2 – 4 weeks</span></div>
+        <div class="meta-item"><label>Who Leads</label><span>Technical / Infrastructure Teams</span></div>
+        <div class="meta-item"><label>Stakeholder Effort</label><span>Low · Data Input &amp; Review</span></div>
+      </div>
+    </div>
+
+    <div class="parallel-badge">⟷ Runs in parallel with Profile Testing (Phase 04) — both begin during the second half of Integration Testing</div>
+
+    <div class="gate-banner info">
+      <div class="gate-icon">🏎️</div>
+      <div class="gate-body">
+        <h3>Why Performance Testing Runs Before UAT — and in Parallel with Integration Testing</h3>
+        <p>Performance Testing begins during the second half of Integration Testing, running in parallel to use time efficiently. A slow or unstable system during UAT undermines confidence, wastes your key users' time, and generates false defects unrelated to business functionality. By resolving performance issues before UAT begins, your teams can focus entirely on business validation. It also ensures infrastructure is correctly sized before the broader organization gets involved.</p>
+      </div>
+    </div>
+
+    <div class="roles-strip">
+      <h3>Who Is Involved</h3>
+      <div class="roles-list">
+        <div class="role-chip chip3"><div class="dot" style="background:#0E6868"></div>Technical / Platform / Basis Team (lead)</div>
+        <div class="role-chip chip3"><div class="dot" style="background:#0E6868"></div>Infrastructure / Cloud Team</div>
+        <div class="role-chip chip3"><div class="dot" style="background:#0E6868"></div>Performance Testing Specialists</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Business (provide peak volumes &amp; SLA targets)</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-label">Test Types Run</div><div class="kpi-value col3">4</div><div class="kpi-sub">load · stress · endurance · spike</div></div>
+      <div class="kpi-card"><div class="kpi-label">Response Time Target</div><div class="kpi-value col3">&lt; 3s</div><div class="kpi-sub">for common user-facing transactions under full load</div></div>
+      <div class="kpi-card"><div class="kpi-label">Concurrent Users</div><div class="kpi-value col3">Peak</div><div class="kpi-sub">system must handle real peak simultaneous load</div></div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0E6868"></div>Types of Performance Tests</div>
+        <ul>
+          <li><strong>Load Testing:</strong> Simulate expected daily user volumes and transaction throughput to verify normal operating performance</li>
+          <li><strong>Stress Testing:</strong> Push the system beyond normal limits to identify where it fails and understand its ceiling</li>
+          <li><strong>Endurance Testing:</strong> Sustained load over extended hours to detect memory leaks or gradual degradation</li>
+          <li><strong>Spike Testing:</strong> Sudden bursts simulating period-end processing, mass uploads, or high-volume order peaks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0E6868"></div>Your Business Input Is Essential</div>
+        <ul>
+          <li>Provide real figures: how many users are active simultaneously at your busiest time of day?</li>
+          <li>Define your peak periods: period-end? Seasonal spikes in orders or deliveries?</li>
+          <li>Quantify volumes: how many orders, invoices, or movements per hour at peak load?</li>
+          <li>Define "too slow" upfront: agree on response time thresholds before testing begins, not after</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0E6868"></div>Key Deliverables for Stakeholders</div>
+        <ul>
+          <li>Performance Test Report — measured response times vs. agreed SLA targets</li>
+          <li>Bottleneck Analysis — where the system slows and why (database, network, custom code, hardware)</li>
+          <li>Infrastructure Sizing Confirmation — or resizing recommendations if issues are found</li>
+          <li>Performance Acceptance Sign-Off confirming the system meets production SLA requirements</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#0E6868"></div>Red Flags to Watch For</div>
+        <ul>
+          <li>Response times exceeding 5 seconds for common transactions under normal load</li>
+          <li>System instability or crashes under peak-load simulation</li>
+          <li>Infrastructure resizing recommendations rejected for cost reasons without formal risk acceptance</li>
+          <li>Custom code identified as a bottleneck — this requires code optimization, not just additional hardware</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gate-banner warn">
+      <div class="gate-icon">🚦</div>
+      <div class="gate-body">
+        <h3>Gate 3 — Performance Acceptance (alongside Profile Testing Gate)</h3>
+        <p>All critical transactions must meet the agreed response-time SLAs. Infrastructure must be confirmed as correctly sized for production volumes. Both technical and business leadership must formally accept the results before UAT begins.</p>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-outline" onclick="goTo(2)">← Integration Testing</button>
+      <button class="btn btn-primary" onclick="goTo(4)">Profile Testing →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 4: PROFILE TESTING ═══ -->
+  <div class="phase-panel" id="panel-4">
+    <div class="phase-hero hero4" data-emoji="🔐">
+      <div class="phase-hero-tag">Phase 04</div>
+      <h2>Profile Testing</h2>
+      <p>Verifies that every user, in every role, has exactly the right level of access to the ERP system — nothing more, nothing less. This phase is about security, compliance, and protecting your business data before anyone logs in for real.</p>
+      <div class="meta">
+        <div class="meta-item"><label>Typical Duration</label><span>2 – 4 weeks</span></div>
+        <div class="meta-item"><label>Who Leads</label><span>IT Security + Business Owners</span></div>
+        <div class="meta-item"><label>Stakeholder Effort</label><span>Medium · Role Sign-Off</span></div>
+      </div>
+    </div>
+
+    <div class="parallel-badge">⟷ Runs in parallel with Performance Testing (Phase 03) — both begin during the second half of Integration Testing</div>
+
+    <div class="gate-banner info">
+      <div class="gate-icon">🔍</div>
+      <div class="gate-body">
+        <h3>Why Profile Testing Happens Before UAT</h3>
+        <p>If users enter UAT with incorrect or incomplete profiles, every test they run is invalid — they may be unable to perform their tasks, or may be able to access things they should not. Resolving access issues beforehand ensures that UAT reflects real production conditions, not a misconfigured environment.</p>
+      </div>
+    </div>
+
+    <div class="roles-strip">
+      <h3>Who Is Involved</h3>
+      <div class="roles-list">
+        <div class="role-chip chip4"><div class="dot" style="background:#B87800"></div>IT Security / GRC Team (lead)</div>
+        <div class="role-chip chip4"><div class="dot" style="background:#B87800"></div>Business Process Owners (role approvers)</div>
+        <div class="role-chip chip4"><div class="dot" style="background:#B87800"></div>HR / People Team (user lists)</div>
+        <div class="role-chip chip4"><div class="dot" style="background:#B87800"></div>Internal Audit / Compliance (observers)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Functional Consultants (access design support)</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#B87800"></div>What Is Being Tested</div>
+        <ul>
+          <li>Each user role tested in isolation with the exact profile they will have at go-live</li>
+          <li>Positive testing: users can perform every task their role requires</li>
+          <li>Negative testing: users <strong>cannot</strong> access transactions, data, or functions outside their role</li>
+          <li>Segregation of Duties (SoD) conflicts — e.g., the same person cannot both create and approve a payment</li>
+          <li>Sensitive access: financial postings, pricing data, and payroll figures restricted to authorized roles only</li>
+          <li>Audit trail and compliance reporting: access control logs working correctly</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#B87800"></div>Key Deliverables for Stakeholders</div>
+        <ul>
+          <li>Profile Testing Report — access control coverage and test results per role</li>
+          <li>SoD Conflict Report — all conflicts identified, with resolution or formal risk acceptance</li>
+          <li>Role Matrix — every role mapped to every user, signed off by the responsible business owner</li>
+          <li>Compliance confirmation that access design meets audit and regulatory requirements</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#B87800"></div>Your Role as a Business Stakeholder</div>
+        <ul>
+          <li>Review and formally sign off on the role matrix for your area — this is a business responsibility, not IT's alone</li>
+          <li>Confirm that every person in your team has the correct role assigned before UAT begins</li>
+          <li>Work with the security team to resolve or formally accept any SoD conflicts in your area</li>
+          <li>Ensure internal audit has reviewed and accepted the access control design</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#B87800"></div>Red Flags to Watch For</div>
+        <ul>
+          <li>Unresolved Segregation of Duties conflicts carried into UAT — these create both audit and operational risk</li>
+          <li>Users given temporary "super-admin" access to work around profile gaps — this masks real problems</li>
+          <li>Role matrix not reviewed or signed off by business owners before UAT begins</li>
+          <li>Regulatory or audit requirements not incorporated into the access design</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gate-banner warn">
+      <div class="gate-icon">🚦</div>
+      <div class="gate-body">
+        <h3>Gate 4 — Role Matrix Sign-Off (alongside Performance Testing Gate)</h3>
+        <p>Every user's production profile confirmed and signed off by their business owner. All SoD conflicts formally resolved or accepted with documented rationale. Compliance and audit team have reviewed the access design. Both gates 3 and 4 must be closed before UAT can begin.</p>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-outline" onclick="goTo(3)">← Performance Testing</button>
+      <button class="btn btn-primary" onclick="goTo(5)">UAT →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 5: UAT ═══ -->
+  <div class="phase-panel" id="panel-5">
+    <div class="phase-hero hero5" data-emoji="👥">
+      <div class="phase-hero-tag">Phase 05 · Your Most Critical Gate</div>
+      <h2>User Acceptance Testing (UAT)</h2>
+      <p>The business community's formal validation that the ERP system performs as agreed — in real scenarios, with real data, executed by the people who will use it every day. By this point, the system is already fast, secure, and functionally stable. UAT answers one question: does it meet your business needs?</p>
+      <div class="meta">
+        <div class="meta-item"><label>Typical Duration</label><span>4 – 8 weeks</span></div>
+        <div class="meta-item"><label>Who Leads</label><span>Business Process Owners</span></div>
+        <div class="meta-item"><label>Stakeholder Effort</label><span>Very High · You Lead This</span></div>
+      </div>
+    </div>
+
+    <div class="gate-banner go">
+      <div class="gate-icon">⭐</div>
+      <div class="gate-body">
+        <h3>This Is Your Phase — Business Owns UAT</h3>
+        <p>By the time UAT begins, performance and security issues have already been resolved. Your teams can focus entirely on validating that the system matches how your business actually works. A UAT sign-off is your organization's formal statement: <em>"We have tested this system and confirm it is fit for purpose."</em> No sign-off = no go-live.</p>
+      </div>
+    </div>
+
+    <!-- Retest buffer warning -->
+    <div class="gate-banner critical">
+      <div class="gate-icon">🔁</div>
+      <div class="gate-body">
+        <h3>Buffer for Retesting — This Must Be Built Into the Plan</h3>
+        <p>When a relevant defect is found during a UAT scenario, fixing it is only the beginning. Once the fix is validated, the <strong>entire test scenario must be re-executed from scratch</strong>. A fix in one step of a business process can introduce unintended side effects upstream or downstream in the same flow. Retesting from the point of failure is not sufficient — the full scenario must pass cleanly before it can be signed off.</p>
+        <p>This means the UAT schedule must have explicit retest buffers built in from the start. Attempting to compress the plan by removing buffer time is one of the most common drivers of UAT failure and go-live delays.</p>
+      </div>
+    </div>
+
+    <!-- User engagement section -->
+    <div class="gate-banner warn">
+      <div class="gate-icon">🤝</div>
+      <div class="gate-body">
+        <h3>User Engagement: Time Is Not Enough — Behavior Matters</h3>
+        <p>Protecting calendar time for key users is necessary, but not sufficient. The quality of UAT depends equally on how users engage with it. Testers do not work in isolation — each user executing a test script is part of a chain. The output of one script is the input of the next, and testers must actively collaborate with the colleagues running the preceding and following steps to ensure handoffs are correctly validated.</p>
+        <p>A user under pressure from their day-to-day responsibilities will hit the first issue they encounter and stop — waiting for a fix instead of continuing where possible or escalating. This halts progress for everyone downstream. UAT testers must be fully released from their regular workload for the duration of the phase. Partial availability produces partial results.</p>
+      </div>
+    </div>
+
+    <!-- New requirements warning -->
+    <div class="gate-banner dark">
+      <div class="gate-icon">⚠️</div>
+      <div class="gate-body">
+        <h3>New Requirements During UAT: The Highest-Risk Moment to Introduce Change</h3>
+        <p>A new requirement raised during UAT carries the most severe impact of any point in the lifecycle. The system has been fully configured, integrated, performance-tested, and secured. Any change now requires reconfiguration, retesting across integration chains, possible re-profiling of access, and a full re-run of affected UAT scenarios.</p>
+        <p>Adding more resources does not solve this — it is a sequencing and interdependency problem, not a capacity one. The change must be assessed for its full ripple effect across all connected processes and systems before a decision is made. In most cases, new requirements at this stage are best deferred to a post-go-live release.</p>
+      </div>
+    </div>
+
+    <div class="roles-strip">
+      <h3>Who Is Involved</h3>
+      <div class="roles-list">
+        <div class="role-chip chip5"><div class="dot" style="background:#107E3E"></div>Business Process Owners (lead)</div>
+        <div class="role-chip chip5"><div class="dot" style="background:#107E3E"></div>Key Users / Super Users (testers)</div>
+        <div class="role-chip chip5"><div class="dot" style="background:#107E3E"></div>Business Management (approvers)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Functional Consultants (support only — not to guide results)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Training Team (observing usability gaps)</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-label">Who Runs Tests</div><div class="kpi-value col5">Business</div><div class="kpi-sub">your teams execute every test script</div></div>
+      <div class="kpi-card"><div class="kpi-label">Pass Rate Target</div><div class="kpi-value col5">≥ 95%</div><div class="kpi-sub">of business scenarios before sign-off</div></div>
+      <div class="kpi-card"><div class="kpi-label">Data Used</div><div class="kpi-value col5">Real</div><div class="kpi-sub">representative, production-like data sets</div></div>
+      <div class="kpi-card"><div class="kpi-label">Sign-Off Authority</div><div class="kpi-value col5">You</div><div class="kpi-sub">business leadership approves — or halts</div></div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#107E3E"></div>What Is Being Tested</div>
+        <ul>
+          <li>All critical day-in-the-life business scenarios, including period-end and special cases</li>
+          <li>Exception handling: what happens when something goes wrong mid-process</li>
+          <li>Usability: are the screens and workflows intuitive for your teams in their real roles?</li>
+          <li>Reporting: do operational, financial, and management reports show correct, complete data?</li>
+          <li>Business rules: discounts, approval thresholds, tax logic, workflow routing</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#107E3E"></div>Key Deliverables for Stakeholders</div>
+        <ul>
+          <li>UAT Execution Report — pass rates per business area and process</li>
+          <li>Business Defect Log — issues raised by your users, with severity classification</li>
+          <li>UAT Sign-Off Document — the formal business go-ahead</li>
+          <li>Outstanding Issues Register — agreed items accepted for post-go-live resolution</li>
+          <li>Training Needs Assessment update based on observations during UAT</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#107E3E"></div>How to Prepare Your Teams</div>
+        <ul>
+          <li>Select your most knowledgeable users — UAT needs expertise, not just availability</li>
+          <li>Fully release testers from their regular workload: partial availability produces partial results</li>
+          <li>Brief testers on their role in the chain — they must coordinate with users running adjacent scripts, not just their own</li>
+          <li>Train testers to write clear defect reports with reproducible steps, not just "it doesn't work"</li>
+          <li>Run a daily defect triage call with the project team to keep issues moving and prevent backlog build-up</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#107E3E"></div>Red Flags to Watch For</div>
+        <ul>
+          <li>Key users pulled back to their regular jobs mid-UAT — this directly and severely damages test quality</li>
+          <li>Testers working in isolation, not communicating with upstream and downstream colleagues</li>
+          <li>UAT compressed to protect an immovable go-live date — resist this pressure firmly</li>
+          <li>High volumes of new defects in the final week — a sign the scope was underestimated</li>
+          <li>"We'll fix it after go-live" used as a substitute for resolving critical issues</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gate-banner critical">
+      <div class="gate-icon">🔴</div>
+      <div class="gate-body">
+        <h3>Gate 5 — UAT Sign-Off: The Most Important Business Decision in the Project</h3>
+        <p>UAT sign-off means: <em>"My business team has tested this system — including full retesting after defect fixes — and confirms it is ready to run our operations."</em> Signing off with unresolved critical issues transfers the risk directly to your live operations. A delay here is far less costly than a troubled go-live. Take the time to get this right.</p>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-outline" onclick="goTo(4)">← Profile Testing</button>
+      <button class="btn btn-primary" onclick="goTo(6)">Business Simulation →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 6: BUSINESS SIMULATION ═══ -->
+  <div class="phase-panel" id="panel-6">
+    <div class="phase-hero hero6" data-emoji="🎭">
+      <div class="phase-hero-tag">Phase 06 · The Final Test Before Go-Live</div>
+      <h2>Business Simulation</h2>
+      <p>An intense, time-compressed exercise — typically just a few days — where the entire organization runs real operations in the system simultaneously, in real roles, with real data. This is not another round of scripted testing. It is the closest thing to go-live, without it being live.</p>
+      <div class="meta">
+        <div class="meta-item"><label>Typical Duration</label><span>3 – 5 days</span></div>
+        <div class="meta-item"><label>Who Leads</label><span>Business + All Project Teams</span></div>
+        <div class="meta-item"><label>Stakeholder Effort</label><span>Very High · All Hands</span></div>
+      </div>
+    </div>
+
+    <div class="gate-banner critical">
+      <div class="gate-icon">🔥</div>
+      <div class="gate-body">
+        <h3>The Ultimate Stress Test — for the System and the Organization</h3>
+        <p>Business Simulation deliberately combines everything at once: functionality, integration, profiles, and performance — all running simultaneously under real conditions. Issues that are invisible when testing phases run in sequence often only surface when everything operates together at the same time. That is exactly what this phase is designed to expose.</p>
+      </div>
+    </div>
+
+    <div class="section-label">What Business Simulation Tests Simultaneously</div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">⚙️</div>
+        <div class="pillar-label">Pillar 1</div>
+        <h4>Functionality</h4>
+        <p>Real transactions executed by real users — not consultants following scripts. Any remaining functional gaps, misconfigured business rules, or incorrect outputs will surface under authentic usage conditions.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🔗</div>
+        <div class="pillar-label">Pillar 2</div>
+        <h4>Integration</h4>
+        <p>Cross-functional handoffs happen organically and simultaneously. Data flows that looked correct in isolation are now tested under real concurrency — across modules and integrated external systems.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🔐</div>
+        <div class="pillar-label">Pillar 3</div>
+        <h4>Profiles</h4>
+        <p>Every participant logs in with their exact production profile. Access gaps or SoD conflicts that slipped through profile testing appear the moment users try to perform their real jobs — which is precisely the point.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">⚡</div>
+        <div class="pillar-label">Pillar 4</div>
+        <h4>Performance</h4>
+        <p>With all areas running simultaneously, the system faces realistic concurrent load — not synthetic test scripts. Response times are validated under genuine multi-user conditions for the last time before production.</p>
+      </div>
+    </div>
+
+    <!-- Training validation -->
+    <div class="gate-banner go">
+      <div class="gate-icon">🎓</div>
+      <div class="gate-body">
+        <h3>Training Effectiveness Is Also on Trial Here</h3>
+        <p>Business Simulation is the primary validation point for end-user training. Ideally, the simulation should be executed by end-users who have completed their training but had no prior involvement in the project — they come in with only what training gave them. This is the most honest test of whether your training program is sufficient to take the organization to go-live.</p>
+        <p>Users who were part of the project throughout will instinctively work around gaps they know about. Fresh, trained end-users will not — and every moment they hesitate, get stuck, or improvise is a gap that must be addressed before go-live.</p>
+      </div>
+    </div>
+
+    <!-- Resource intensity -->
+    <div class="gate-banner warn">
+      <div class="gate-icon">🌡️</div>
+      <div class="gate-body">
+        <h3>The Most Intense Resource Demand Period of the Entire Project</h3>
+        <p>Despite its short duration, Business Simulation places the highest simultaneous demand on business resources of any phase. End-users are running operations all day. But equally critical is the availability of the people who originally defined the requirements — because most issues found at this stage are not system bugs. They are misunderstandings about how the system was designed to behave versus how users expect it to behave.</p>
+        <p>Requirement owners must be on standby throughout the simulation to quickly arbitrate these situations: is this a defect to be fixed, or a correct behavior that requires a process or training adjustment? Fast decisions keep the simulation moving. Without the right people available to answer these questions in real time, the exercise stalls — and the short window available for this phase is wasted.</p>
+      </div>
+    </div>
+
+    <div class="roles-strip">
+      <h3>Who Is Involved — Everyone</h3>
+      <div class="roles-list">
+        <div class="role-chip chip6"><div class="dot" style="background:#9B1010"></div>Trained end-users with no prior project involvement (primary testers)</div>
+        <div class="role-chip chip6"><div class="dot" style="background:#9B1010"></div>All Business Process Owners (lead &amp; arbitration)</div>
+        <div class="role-chip chip6"><div class="dot" style="background:#9B1010"></div>Requirement owners — on standby throughout</div>
+        <div class="role-chip chip6"><div class="dot" style="background:#9B1010"></div>Executive Sponsors (observers &amp; escalation point)</div>
+        <div class="role-chip chip6"><div class="dot" style="background:#9B1010"></div>All Functional Consultants (support on standby)</div>
+        <div class="role-chip chip6"><div class="dot" style="background:#9B1010"></div>Technical / Infrastructure Team (system monitoring)</div>
+        <div class="role-chip chipN"><div class="dot" style="background:#ccc"></div>Training Team (observing and capturing gaps)</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-label">Duration</div><div class="kpi-value col6">3–5</div><div class="kpi-sub">intensive days simulating weeks of real operations</div></div>
+      <div class="kpi-card"><div class="kpi-label">Participants</div><div class="kpi-value col6">All</div><div class="kpi-sub">every functional area running simultaneously</div></div>
+      <div class="kpi-card"><div class="kpi-label">Profiles Used</div><div class="kpi-value col6">Production</div><div class="kpi-sub">exact go-live profiles — no test accounts</div></div>
+      <div class="kpi-card"><div class="kpi-label">Primary Testers</div><div class="kpi-value col6">Fresh</div><div class="kpi-sub">trained end-users with no prior project exposure</div></div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#9B1010"></div>What This Phase Reveals That Others Don't</div>
+        <ul>
+          <li>Process ownership gaps: who handles a transaction when the primary person is unavailable?</li>
+          <li>Approval chain failures: bottlenecks or missing approvers in workflow routing</li>
+          <li>Training gaps that only appear when users face the system without project team guidance</li>
+          <li>Concurrency issues: data conflicts or locking that only emerge under real simultaneous load</li>
+          <li>Requirement misunderstandings: correct system behavior that users did not expect</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#9B1010"></div>Key Deliverables for Stakeholders</div>
+        <ul>
+          <li>Business Simulation Results Report — issues categorized by type: defect vs. training gap vs. misunderstood requirement</li>
+          <li>Training Effectiveness Assessment — gaps identified during execution by fresh end-users</li>
+          <li>Outstanding Issues Register — final list requiring resolution or formal acceptance before go-live</li>
+          <li>Go-Live Readiness Declaration — formal statement by business leadership that the organization is ready</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#9B1010"></div>Red Flags to Watch For</div>
+        <ul>
+          <li>Project team members substituting for trained end-users — this defeats the purpose of the exercise</li>
+          <li>Participants logging in with admin or test profiles instead of production profiles</li>
+          <li>Requirement owners unavailable to arbitrate issues in real time — the simulation will stall</li>
+          <li>High frequency of "I don't know how to do this" from trained users — training is not ready</li>
+          <li>The simulation being shortened or skipped to protect the go-live date — this is the highest-risk shortcut in the entire project</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot" style="background:#9B1010"></div>Issue Classification During Simulation</div>
+        <ul>
+          <li><strong>System defect:</strong> the system behaves incorrectly — must be fixed and retested before go-live</li>
+          <li><strong>Training gap:</strong> the system is correct, but users were not adequately prepared — training must be updated</li>
+          <li><strong>Requirement misunderstanding:</strong> the system was built as designed, but the design did not match operational reality — requires a process, configuration, or expectation adjustment</li>
+          <li><strong>Process gap:</strong> an operational scenario not covered by any script emerges — must be designed and validated</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gate-banner go">
+      <div class="gate-icon">🏁</div>
+      <div class="gate-body">
+        <h3>Gate 6 — Go-Live Readiness Declaration</h3>
+        <p>Following Business Simulation, a formal Go-Live Readiness Review brings together business leaders, IT, and executive sponsors to assess all six testing phases together. Every outstanding issue is reviewed and classified. The business makes the final call: proceed, or hold. This is a governance decision — made with complete information, not schedule pressure. Completing all six phases is what makes that decision a confident one.</p>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-outline" onclick="goTo(5)">← UAT</button>
+      <button class="btn btn-primary" onclick="goTo(0)">↺ Back to Overview</button>
+    </div>
+  </div>
+
+  <!-- Phase dots -->
+  <div class="phase-dots" id="phaseDots">
+    <div class="phase-dot active" onclick="goTo(0)" style="background:#556B7D"></div>
+    <div class="phase-dot" onclick="goTo(1)" style="background:#0057B8"></div>
+    <div class="phase-dot" onclick="goTo(2)" style="background:#5B38B5"></div>
+    <div class="phase-dot" onclick="goTo(3)" style="background:#0E6868"></div>
+    <div class="phase-dot" onclick="goTo(4)" style="background:#B87800"></div>
+    <div class="phase-dot" onclick="goTo(5)" style="background:#107E3E"></div>
+    <div class="phase-dot" onclick="goTo(6)" style="background:#9B1010"></div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-cta">
+    <h3>Why I built this</h3>
+    <p>I've been in the room for several ERP implementations, and the same patterns keep repeating. The phases are well understood inside the project team — and almost never explained clearly to the business stakeholders who own the most consequential decisions. This guide is my attempt to fix that gap.</p>
+    <p>If you're heading into an ERP rollout, I hope this gives you a clearer mental model of where your attention matters most. If you've already lived through one, I'd love to hear what you'd add.</p>
+    <div class="question">💬 Which of the six phases do you think is most underestimated by business stakeholders — and why? Drop a comment on the LinkedIn post.</div>
+  </div>
+
+  <div class="author-card">
+    <div class="author-avatar">CG</div>
+    <div class="author-text">
+      <div class="author-label">About the author</div>
+      <h4>Carlos Gabriel</h4>
+      <p class="author-title">SAP S/4HANA Program Lead · Large-Scale ERP Transformation · LATAM Delivery</p>
+      <p>20+ years leading large-scale ERP transformations across Latin America — including the Logistics workstream of AB-InBev's SAP S/4HANA program (the world's largest S/4HANA implementation at the time, 90+ person team) and end-to-end ownership of Unilever's Freight ERP transformation in Brazil. This guide distills the patterns that repeat across major implementations, regardless of platform.</p>
+      <a href="https://www.linkedin.com/in/carlosgabriel/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="footer-meta">
+    ERP Testing Lifecycle · Best Practices for Complex ERP Implementations · For Business Stakeholders
+  </div>
+</footer>
+
+<script>
+  let currentPhase = 0;
+  function goTo(phase) {
+    document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('visible'));
+    const target = document.getElementById('panel-' + phase);
+    if (target) target.classList.add('visible');
+    document.querySelectorAll('.step').forEach(s => {
+      const active = parseInt(s.dataset.phase) === phase;
+      s.classList.toggle('active', active);
+      if (active) s.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+    document.querySelectorAll('.phase-dot').forEach((d, i) => d.classList.toggle('active', i === phase));
+    currentPhase = phase;
+    document.querySelector('.stepper-wrap').scrollIntoView({ behavior: 'smooth' });
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && currentPhase < 6) goTo(currentPhase + 1);
+    if (e.key === 'ArrowLeft'  && currentPhase > 0) goTo(currentPhase - 1);
+  });
+</script>
+</body>
+</html>
